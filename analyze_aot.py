@@ -19,9 +19,19 @@ aot_daily_summary = aot_data.groupby('Date').agg(
 print("สรุปหุ้น AOT ที่มีราคาสูงสุดและต่ำสุดในแต่ละวัน:")
 print(aot_daily_summary)
 
+# บันทึกข้อมูลสรุปลงไฟล์
+with open("aot_analysis.txt", "w", encoding="utf-8") as file:
+    file.write("สรุปหุ้น AOT ที่มีราคาสูงสุดและต่ำสุดในแต่ละวัน:\n")
+    file.write(aot_daily_summary.to_string())
+    file.write("\n\n")
+
 # 2. คำนวณค่าเฉลี่ยราคาหุ้น AOT
 aot_average_price = aot_data['Price'].mean()
 print(f"\nค่าเฉลี่ยราคาหุ้น AOT: {aot_average_price:.2f}")
+
+# บันทึกค่าเฉลี่ยราคาหุ้นลงไฟล์
+with open("aot_analysis.txt", "a", encoding="utf-8") as file:
+    file.write(f"ค่าเฉลี่ยราคาหุ้น AOT: {aot_average_price:.2f}\n\n")
 
 # 3. คำนวณค่าเฉลี่ยเคลื่อนที่ (Moving Average)
 aot_data = aot_data.sort_values(by='Date')  # เรียงข้อมูลตามวันที่
@@ -43,6 +53,11 @@ plt.show()
 
 # 5. วิเคราะห์แนวโน้ม
 if aot_data['MA_7'].iloc[-1] > aot_data['MA_14'].iloc[-1]:
-    print("\nแนวโน้ม: ราคาหุ้น AOT กำลังอยู่ในช่วงขาขึ้น (Uptrend)")
+    trend = "ราคาหุ้น AOT กำลังอยู่ในช่วงขาขึ้น (Uptrend)"
 else:
-    print("\nแนวโน้ม: ราคาหุ้น AOT กำลังอยู่ในช่วงขาลง (Downtrend)")
+    trend = "ราคาหุ้น AOT กำลังอยู่ในช่วงขาลง (Downtrend)"
+print(f"\nแนวโน้ม: {trend}")
+
+# บันทึกแนวโน้มลงไฟล์
+with open("aot_analysis.txt", "a", encoding="utf-8") as file:
+    file.write(f"แนวโน้ม: {trend}\n")
